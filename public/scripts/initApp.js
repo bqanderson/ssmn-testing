@@ -30,7 +30,7 @@ angular.module('initApp', ['ui.knob', 'ngMaterial'])
     var initPhases = [{
       // These two valuses will be binding
       phaseName: 'Phase One',
-      phaseValue: 35,
+      phaseValue: 0,
       // no longer binding data (this is repeated)
       phaseOptions: phaseOptions,
       mileStones: [{
@@ -100,7 +100,7 @@ angular.module('initApp', ['ui.knob', 'ngMaterial'])
     },
     {
       phaseName: 'Phase Two',
-      phaseValue: 20,
+      phaseValue: 0,
       phaseOptions: phaseOptions,
       mileStones: [{
         name: 'Fundraising',
@@ -169,98 +169,42 @@ angular.module('initApp', ['ui.knob', 'ngMaterial'])
     }]
 
     // Function(s) to mine the data needed
-    console.log('Phases Array:', initPhases);
+    // console.log('Phases Array:', initPhases);
 
     vm.initPhases = initPhases;
 
+    // console.log('vm.initPhases', vm.initPhases);
 
-    for (var i = 0; i < initPhases.length; i++) {
-      vm.mileStones = initPhases[i].mileStones
-      console.log('vm.mileStones', initPhases[i].phaseName, vm.mileStones);
-
-      // $scope.$watchCollection(function() {
-      //   return vm.mileStones.map(function(mileStone){
-      //     return vm.mileStone.value;
-      //   })
-      // }, function(){
-      //   console.log('Value of mileStone', mileStone.value);
-      // })
-
-
-      $scope.$watchCollection(function(){
-        console.log('Are we here?', vm.mileStones);
-        return vm.mileStones.map(function(mileStone){
-          // console.log('How about here?');
-          console.log('Milestone', mileStone);
-
-          return mileStone.value;
-        });
-      }, function(){
-        // console.log('Are we getting here?', vm.mileStones);
-        tempValue = 0;
-        for (var j = 0; j < vm.mileStones.length; j++) {
-          // console.log('We get here');
-          var milestone = vm.mileStones[j];
-          // console.log('Milestone', milestone.value);
-          arrayMsPercent.push((milestone.value/milestone.msOptions.max)/(vm.mileStones.length)*100);
-          // console.log('Milestone %:', arrayMsPercent);
+    $scope.$watchCollection(function(){
+      var values =[];
+      for (var i = 0; i < vm.initPhases.length; i++) {
+        // console.log('Each vm.initPhases', vm.initPhases[i]);
+        for (var j = 0; j < vm.initPhases[i].mileStones.length; j++) {
+          // console.log('Each Milestone',vm.initPhases[i].mileStones[j].value);
+          values.push(vm.initPhases[i].mileStones[j].value);
+          console.log('Values array', values);
         }
-        for (var k = 0; k < arrayMsPercent.length; k++) {
-          tempValue += arrayMsPercent.pop();
-          // console.log('Phase Value:', vm.initPhases.name, tempValue);
+      }
+    }, function() {
+      var ourArray = [];
+        for(var k = 0; k < vm.initPhases.length; k++){
+          tempValue = 0;
+          for (var l = 0; l < vm.initPhases[k].mileStones.length; l++) {
+           var milestone = vm.initPhases[k].mileStones[l];
+          //  console.log('MS value', milestone.value);
+           arrayMsPercent.push((milestone.value/milestone.msOptions.max)/(vm.initPhases[k].mileStones.length)*100);
+          //  console.log('milestone percent', arrayMsPercent);
+          }
+          for (var m = 0; m < arrayMsPercent.length; m++) {
+           tempValue += arrayMsPercent.pop();
+          }
+         console.log('Total Percent', tempValue);
+         vm.initPhases[k].phaseValue = tempValue;
         }
-      })
-    }
 
-
-    // console.log('Phase Total Value for', vm.initPhases[i].phaseName, tempValue);
+    })
 
 
 
-
-    //
-    // $scope.$watchCollection(function () {
-    //   return vm.mileStones.map(function(mileStone){
-    //     return mileStone.value;
-    //   });
-    // }, function(){
-    //   tempValue = 0;
-    //   for (var i = 0; i < vm.mileStones.length; i++) {
-    //     var milestone = vm.mileStones[i];
-    //     arrayMsPercent.push((milestone.value/milestone.options.max)/(vm.mileStones.length)*100);
-    //     console.log(arrayMsPercent);
-    //   }
-    //   for (var j = 0; j < arrayMsPercent.length; i++) {
-    //     tempValue += arrayMsPercent.pop();
-    //   }
-    //   console.log(tempValue);
-    //   vm.phaseOneValue = tempValue;
-    // })
-
-
-
-
-    // Function to get Phase Vaule
-
-    // function getPhaseValue(){
-    //   tempValue = 0;
-    //   for (var i = 0; i < vm.mileStones.length; i++) {
-    //     var milestone = vm.mileStones[i];
-    //     arrayMsPercent.push((milestone.value/milestone.options.max)/(vm.mileStones.length)*100);
-    //     console.log(arrayMsPercent);
-    //   }
-    //   for (var j = 0; j < arrayMsPercent.length; i++) {
-    //     tempValue += arrayMsPercent.pop();
-    //   }
-    //   console.log(tempValue);
-    //   vm.phaseOneValue = tempValue;
-    //
-    // }
-    //
-    // // Function to update phase value (keep repeated function ('getPhaseValue()') in there
-    // // until I can figure out how to refactor)
-
-    //
-    // getPhaseValue();
 
 });
