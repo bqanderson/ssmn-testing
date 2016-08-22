@@ -27,7 +27,7 @@
       <h1>Testing NG Knobs for the Win!</h1>
     </md-toolbar>
 
-    <div class="container" layout="row" flex>
+    <!-- <div class="container" layout="row" flex>
       <md-sidenav md-is-locked-open="true" class="md-whiteframe-3dp">
         <md-list ng-repeat="mileStone in ic.mileStones track by $index">
           <md-list-item>
@@ -35,12 +35,15 @@
             {{mileStone.options.subText.text}}
           </md-list-item>
         </md-list>
-      </md-sidenav>
+      </md-sidenav> -->
       <md-content id="content" flex>
-        <div>
-          <ui-knob value="ic.phaseOneValue" options="ic.phaseOneOptions"></ui-knob>
-          <ui-knob value="ic.phaseTwoValue" options="ic.phaseTwoOptions"></ui-knob>
+        <div ng-repeat="phase in ic.initPhases track by $index">
+          <ui-knob value="phase.phaseValue" options="phase.phaseOptions"></ui-knob>
           <md-button class="btn1">Update</md-button>
+          <div ng-repeat="mileStone in phase.mileStones track by $index">
+            Milestone: {{mileStone.name}}
+            <ui-knob value="mileStone.value" options="mileStone.msOptions"></ui-knob>
+          </div>
         </div>
       </md-content>
     </div>
